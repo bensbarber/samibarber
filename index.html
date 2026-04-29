@@ -205,9 +205,9 @@ footer { padding:44px 40px; border-top:1px solid rgba(255,255,255,0.06); display
 #footer-secret { cursor:default; user-select:none; -webkit-user-select:none; }
 
 /* ====================================================
-CUSTOM DIALOG
+CUSTOM DIALOG — z-index DOIT être > admin-overlay (99999)
 ==================================================== */
-#custom-dialog { display:none; position:fixed; inset:0; z-index:99990; background:rgba(0,0,0,0.78); align-items:center; justify-content:center; padding:20px; }
+#custom-dialog { display:none; position:fixed; inset:0; z-index:9999999; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; padding:20px; }
 #custom-dialog.show { display:flex; }
 .dialog-box { background:#111110; border:1px solid rgba(196,150,42,0.2); border-radius:12px; padding:30px 26px; max-width:360px; width:100%; text-align:center; }
 .dialog-icon { font-size:30px; margin-bottom:12px; }
@@ -295,8 +295,12 @@ ADMIN OVERLAY
 .btn-danger:hover { background:rgba(192,57,43,.2); border-color:#c0392b; }
 .btn-export { background:#242420; border:1px solid rgba(196,150,42,0.2); color:#f0ede6; padding:10px 18px; border-radius:6px; font-family:‘DM Sans’,sans-serif; font-size:12px; cursor:pointer; transition:all .2s; }
 .btn-export:hover { border-color:#c4962a; color:#c4962a; }
-.save-msg { font-size:12px; color:#27ae60; margin-left:10px; opacity:0; transition:opacity .3s; }
-.save-msg.show { opacity:1; }
+.save-msg { font-size:13px; color:#27ae60; font-weight:600; margin-left:10px; opacity:0; visibility:hidden; transition:opacity .3s, visibility .3s; }
+.save-msg.show { opacity:1; visibility:visible; }
+
+/* Toast notification for admin actions - visible above everything */
+#admin-toast { display:none; position:fixed; bottom:32px; left:50%; transform:translateX(-50%); z-index:9999999; background:#27ae60; color:#ffffff; padding:13px 28px; border-radius:8px; font-family:‘DM Sans’,sans-serif; font-size:14px; font-weight:600; box-shadow:0 4px 20px rgba(0,0,0,0.4); white-space:nowrap; }
+#admin-toast.show { display:block; }
 .err-msg { font-size:12px; color:#ff6b6b; margin-left:6px; }
 .blocked-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
 .blocked-chip { display:flex; align-items:center; gap:7px; background:#1a1a18; border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:5px 11px; font-size:12px; color:#7a7970; }
@@ -563,6 +567,10 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
     </div>
   </div>
 </div>
+
+<!-- TOAST -->
+
+<div id="admin-toast"></div>
 
 <!-- ADMIN -->
 
@@ -1059,7 +1067,16 @@ function savePwd(){
 }
 function saveSocial(){S.tiktok=document.getElementById('s-tiktok').value.trim();S.instagram=document.getElementById('s-insta').value.trim();S.snapchat=document.getElementById('s-snap').value.trim();saveAll();applySocial();showMsg('msg-social');}
 function askReset(){showDlg('Réinitialiser tous les paramètres ?','↺',function(){S=Object.assign({},DEFS);saveAll();fillSettings();applyPause();applySocial();});}
-function showMsg(id){var el=document.getElementById(id);el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2500);}
+function showMsg(id){
+  /* inline save-msg (keep for reference but may not show on iOS) */
+  var el=document.getElementById(id);
+  if(el){el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2500);}
+  /* Toast visible above everything */
+  var toast=document.getElementById('admin-toast');
+  toast.textContent='✓ Sauvegardé !';
+  toast.classList.add('show');
+  setTimeout(function(){toast.classList.remove('show');},2000);
+}
 
 /* EXPORT */
 function exportCSV(){
