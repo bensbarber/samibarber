@@ -7,26 +7,18 @@
 <title>Sami Barber — Lyon 2</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ====================================================
-   RESET — zéro CSS variable, tout en hex pur
-   ==================================================== */
-*  { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body { font-family:'DM Sans',sans-serif; background:#080807; color:#f0ede6; min-height:100vh; overflow-x:hidden; }
-a    { color:inherit; text-decoration:none; -webkit-text-decoration:none; }
-button { -webkit-appearance:none; appearance:none; }
-img  { display:block; max-width:100%; }
 
-/* ====================================================
-PAUSE BANNER
-==================================================== */
+- { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:‘DM Sans’,sans-serif; background:#080807; color:#f0ede6; min-height:100vh; overflow-x:hidden; }
+  a    { color:inherit; text-decoration:none; -webkit-text-decoration:none; }
+  button { -webkit-appearance:none; appearance:none; }
+  img  { display:block; max-width:100%; }
+
 #pause-banner { display:none; background:linear-gradient(135deg,#5a1a1a,#3a0f0f); border-bottom:2px solid #c0392b; padding:16px 24px; text-align:center; font-size:15px; font-weight:500; color:#ffd0cc; }
 #pause-banner.show { display:block; }
 #pause-banner strong { color:#ff9090; }
 
-/* ====================================================
-NAVBAR
-==================================================== */
 nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; background:rgba(8,8,7,0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.06); transition:padding .3s; }
 nav.scrolled { padding:12px 40px; }
 .nav-logo { font-family:‘Playfair Display’,serif; font-size:22px; color:#e8b84b; letter-spacing:1px; }
@@ -47,9 +39,6 @@ nav.scrolled { padding:12px 40px; }
 
 #admin-btn { width:1px; height:1px; background:none; border:none; padding:0; overflow:hidden; opacity:0; pointer-events:none; }
 
-/* ====================================================
-HERO
-==================================================== */
 #hero { min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; position:relative; overflow:hidden; padding:0 24px; background:#080807; }
 .hero-glow { position:absolute; inset:0; background:radial-gradient(ellipse 70% 50% at 50% 40%, rgba(196,150,42,0.08) 0%, transparent 70%); pointer-events:none; }
 .hero-content { position:relative; z-index:2; max-width:680px; }
@@ -66,16 +55,10 @@ HERO
 .hero-scroll span { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#4a4a44; }
 .scroll-line { width:1px; height:40px; background:linear-gradient(to bottom,#c4962a,transparent); animation:scrollPulse 2s ease-in-out infinite; }
 
-/* ====================================================
-SECTION COMMONS
-==================================================== */
 .s-label { font-size:10px; letter-spacing:5px; text-transform:uppercase; color:#c4962a; margin-bottom:16px; display:block; }
 .s-title { font-family:‘Playfair Display’,serif; font-size:clamp(34px,5vw,54px); line-height:1.1; color:#f0ede6; }
 .s-title em { font-style:italic; color:#e8b84b; }
 
-/* ====================================================
-SERVICES
-==================================================== */
 #services { padding:120px 40px; max-width:1100px; margin:0 auto; }
 #services .s-title { margin-bottom:60px; }
 .services-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; }
@@ -90,9 +73,6 @@ SERVICES
 .service-price sup { font-size:20px; vertical-align:super; color:#e8b84b; }
 .service-duration { font-size:11px; color:#4a4a44; letter-spacing:2.5px; text-transform:uppercase; margin-top:8px; }
 
-/* ====================================================
-BOOKING
-==================================================== */
 #booking { padding:120px 40px; background:#111110; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); }
 .booking-inner { max-width:860px; margin:0 auto; }
 #booking .s-title { margin-bottom:40px; }
@@ -176,9 +156,6 @@ BOOKING
 .success-sub { font-size:15px; color:#7a7970; margin-bottom:28px; }
 .success-ref { font-size:11px; letter-spacing:3px; color:#4a4a44; font-family:monospace; }
 
-/* ====================================================
-INFO
-==================================================== */
 #info { padding:120px 40px; max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
 .info-title { font-family:‘Playfair Display’,serif; font-size:34px; margin-bottom:28px; color:#f0ede6; }
 .hours-list { list-style:none; }
@@ -197,16 +174,10 @@ INFO
 .maps-link { display:inline-flex; align-items:center; gap:8px; color:#c4962a; font-size:13px; letter-spacing:1px; border-bottom:1px solid rgba(196,150,42,0.25); padding-bottom:3px; transition:color .2s; text-decoration:none; }
 .maps-link:hover { color:#e8b84b; }
 
-/* ====================================================
-FOOTER
-==================================================== */
 footer { padding:44px 40px; border-top:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:space-between; font-size:13px; color:#4a4a44; background:#080807; flex-wrap:wrap; gap:16px; }
 .footer-logo { font-family:‘Playfair Display’,serif; font-size:18px; color:#c4962a; font-style:italic; }
 #footer-secret { cursor:default; user-select:none; -webkit-user-select:none; }
 
-/* ====================================================
-CUSTOM DIALOG — z-index DOIT être > admin-overlay (99999)
-==================================================== */
 #custom-dialog { display:none; position:fixed; inset:0; z-index:9999999; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; padding:20px; }
 #custom-dialog.show { display:flex; }
 .dialog-box { background:#111110; border:1px solid rgba(196,150,42,0.2); border-radius:12px; padding:30px 26px; max-width:360px; width:100%; text-align:center; }
@@ -220,9 +191,6 @@ CUSTOM DIALOG — z-index DOIT être > admin-overlay (99999)
 .btn-dok.gold { background-color:#c4962a; color:#080807; }
 .btn-dok.gold:hover { background-color:#e8b84b; }
 
-/* ====================================================
-ADMIN OVERLAY
-==================================================== */
 #admin-overlay { display:none; position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.93); overflow-y:auto; }
 #admin-overlay.show { display:flex; flex-direction:column; align-items:center; }
 .admin-login { margin:auto; background:#111110; border:1px solid rgba(196,150,42,0.2); border-radius:16px; padding:44px; width:100%; max-width:400px; text-align:center; }
@@ -311,16 +279,10 @@ ADMIN OVERLAY
 .pwd-wrap .s-in { margin:0; padding-right:46px; }
 .pwd-eye { position:absolute; right:11px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#4a4a44; font-size:15px; padding:4px; }
 
-/* ====================================================
-ANIMATIONS
-==================================================== */
 @keyframes fadeUp  { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
 @keyframes fadeIn  { from { opacity:0; } to { opacity:1; } }
 @keyframes scrollPulse { 0%,100% { opacity:.25; } 50% { opacity:1; } }
 
-/* ====================================================
-RESPONSIVE
-==================================================== */
 @media (max-width:768px) {
 nav { padding:14px 20px; }
 .nav-links a { display:none; }
@@ -734,9 +696,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
 </div>
 
 <script>
-/* ====================================================
-   STORAGE
-   ==================================================== */
+
 function ld(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
@@ -747,16 +707,10 @@ var appts=ld('sb_a',[]);
 var blocked=ld('sb_b',[]);
 function saveAll(){sv('sb_s',S);sv('sb_a',appts);sv('sb_b',blocked);}
 
-/* ====================================================
-   BOOKING STATE
-   ==================================================== */
 var bs={svc:null,date:null,time:null,prenom:'',nom:'',tel:'',note:''};
 var cY,cM;
 var _n=new Date();cY=_n.getFullYear();cM=_n.getMonth();
 
-/* ====================================================
-   INIT
-   ==================================================== */
 document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('footer-year').textContent=new Date().getFullYear();
   applyPause();applySocial();renderCal();fillTimeSelect();fillSettings();
@@ -786,9 +740,6 @@ function applySocial(){
   });
 }
 
-/* ====================================================
-   CUSTOM DIALOG
-   ==================================================== */
 var _cb=null;
 function showDlg(msg,icon,cb,okLbl,okCls){
   document.getElementById('d-msg').textContent=msg;
@@ -807,9 +758,6 @@ document.getElementById('d-ok').addEventListener('click',function(){
   if(_cb){var fn=_cb;_cb=null;fn();}
 });
 
-/* ====================================================
-   BOOKING
-   ==================================================== */
 function goStep(n){
   document.querySelectorAll('.booking-panel').forEach(function(p){p.classList.remove('active');});
   document.getElementById('panel-'+n).classList.add('active');
@@ -921,9 +869,6 @@ function resetBook(){
   goStep(1);
 }
 
-/* ====================================================
-   ADMIN
-   ==================================================== */
 function openAdmin(){
   document.getElementById('admin-overlay').classList.add('show');
   document.getElementById('admin-login').style.display='block';
