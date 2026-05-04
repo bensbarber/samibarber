@@ -178,6 +178,10 @@ footer { padding:44px 40px; border-top:1px solid rgba(255,255,255,0.06); display
 .footer-logo { font-family:‘Playfair Display’,serif; font-size:18px; color:#c4962a; font-style:italic; }
 #footer-secret { cursor:default; user-select:none; -webkit-user-select:none; }
 
+.day-chk { display:flex; align-items:center; gap:6px; background:#1a1a18; border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:8px 14px; font-size:13px; color:#7a7970; cursor:pointer; transition:all .2s; }
+.day-chk input { width:15px; height:15px; accent-color:#c4962a; cursor:pointer; margin:0; }
+.day-chk.active { border-color:#c4962a; color:#e8b84b; background:rgba(196,150,42,0.08); }
+
 #custom-dialog { display:none; position:fixed; inset:0; z-index:9999999; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; padding:20px; }
 #custom-dialog.show { display:flex; }
 .dialog-box { background:#111110; border:1px solid rgba(196,150,42,0.2); border-radius:12px; padding:30px 26px; max-width:360px; width:100%; text-align:center; }
@@ -471,7 +475,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
 <div id="booking-success">
   <div class="success-icon">✓</div>
   <h3 class="success-title">Rendez-vous confirmé !</h3>
-  <p class="success-sub">À très bientôt chez Sami Barber.<br>18 cours Charlemagne, Lyon 2.</p>
+  <p class="success-sub" id="site-success-sub">À très bientôt chez Sami Barber.<br>18 cours Charlemagne, Lyon 2.</p>
   <p class="success-ref" id="success-ref"></p>
   <br><br>
   <button class="btn-next" style="margin:auto;display:block" onclick="resetBook()">Nouveau rendez-vous</button>
@@ -486,14 +490,14 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
   <div>
     <span class="s-label">Horaires</span>
     <h2 class="info-title">Quand nous <em style="font-style:italic;color:#e8b84b">trouver</em></h2>
-    <ul class="hours-list">
-      <li class="hours-row closed"><span class="hours-day">Lundi</span><span class="hours-time">Fermé</span></li>
-      <li class="hours-row closed"><span class="hours-day">Mardi</span><span class="hours-time">Fermé</span></li>
-      <li class="hours-row open"><span class="hours-day">Mercredi</span><span class="hours-time">10h – 17h</span></li>
-      <li class="hours-row open"><span class="hours-day">Jeudi</span><span class="hours-time">10h – 17h</span></li>
-      <li class="hours-row open"><span class="hours-day">Vendredi</span><span class="hours-time">10h – 17h</span></li>
-      <li class="hours-row open"><span class="hours-day">Samedi</span><span class="hours-time">10h – 17h</span></li>
-      <li class="hours-row closed"><span class="hours-day">Dimanche</span><span class="hours-time">Fermé</span></li>
+    <ul class="hours-list" id="site-hours-list">
+      <li class="hours-row closed" id="hr-0"><span class="hours-day">Lundi</span><span class="hours-time" id="ht-0">Fermé</span></li>
+      <li class="hours-row closed" id="hr-1"><span class="hours-day">Mardi</span><span class="hours-time" id="ht-1">Fermé</span></li>
+      <li class="hours-row open"   id="hr-3"><span class="hours-day">Mercredi</span><span class="hours-time" id="ht-3">10h – 17h</span></li>
+      <li class="hours-row open"   id="hr-4"><span class="hours-day">Jeudi</span><span class="hours-time" id="ht-4">10h – 17h</span></li>
+      <li class="hours-row open"   id="hr-5"><span class="hours-day">Vendredi</span><span class="hours-time" id="ht-5">10h – 17h</span></li>
+      <li class="hours-row open"   id="hr-6"><span class="hours-day">Samedi</span><span class="hours-time" id="ht-6">10h – 17h</span></li>
+      <li class="hours-row closed" id="hr-2"><span class="hours-day">Dimanche</span><span class="hours-time" id="ht-2">Fermé</span></li>
     </ul>
   </div>
   <div>
@@ -501,17 +505,17 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
     <h2 class="info-title">Nous <em style="font-style:italic;color:#e8b84b">trouver</em></h2>
     <div class="address-card">
       <div class="address-icon">📍</div>
-      <div class="address-main">18 cours Charlemagne</div>
-      <div class="address-city">69002 Lyon — 2e arrondissement</div>
+      <div class="address-main" id="site-addr-main">18 cours Charlemagne</div>
+      <div class="address-city" id="site-addr-city">69002 Lyon — 2e arrondissement</div>
     </div>
-    <a class="maps-link" href="https://maps.google.com/?q=18+cours+Charlemagne+Lyon" target="_blank" rel="noopener">Voir sur Google Maps →</a>
+    <a class="maps-link" id="site-maps-link" href="https://maps.google.com/?q=18+cours+Charlemagne+Lyon" target="_blank" rel="noopener">Voir sur Google Maps →</a>
   </div>
 </section>
 
 <!-- FOOTER -->
 
 <footer>
-  <div class="footer-logo">Sami Barber</div>
+  <div class="footer-logo" id="site-footer-name">Sami Barber</div>
   <div class="social-links">
     <a class="social-link tiktok" id="fl-tiktok" href="https://www.tiktok.com/@samibarber69?_r=1&_t=ZN-95tqV4jEXva" target="_blank" rel="noopener" title="TikTok">
       <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.31 6.31 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.15 8.15 0 004.77 1.52V6.75a4.85 4.85 0 01-1-.06z"/></svg>
@@ -656,9 +660,19 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
     <div style="display:flex;align-items:center;gap:10px;margin-top:12px"><button class="btn-save" onclick="savePrices()">Sauvegarder</button><span class="save-msg" id="msg-prices">✓</span></div>
   </div>
   <div class="ss">
-    <div class="ss-title">🕐 Horaires</div>
+    <div class="ss-title">🕐 Horaires & Jours d'ouverture</div>
+    <label class="form-label">Jours ouverts</label>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px" id="day-checkboxes">
+      <label class="day-chk" id="dc-1"><input type="checkbox" value="1" onchange="updateDayPreview()"> Lundi</label>
+      <label class="day-chk" id="dc-2"><input type="checkbox" value="2" onchange="updateDayPreview()"> Mardi</label>
+      <label class="day-chk" id="dc-3"><input type="checkbox" value="3" onchange="updateDayPreview()"> Mercredi</label>
+      <label class="day-chk" id="dc-4"><input type="checkbox" value="4" onchange="updateDayPreview()"> Jeudi</label>
+      <label class="day-chk" id="dc-5"><input type="checkbox" value="5" onchange="updateDayPreview()"> Vendredi</label>
+      <label class="day-chk" id="dc-6"><input type="checkbox" value="6" onchange="updateDayPreview()"> Samedi</label>
+      <label class="day-chk" id="dc-0"><input type="checkbox" value="0" onchange="updateDayPreview()"> Dimanche</label>
+    </div>
     <div class="s-row">
-      <div><label class="form-label">Ouverture</label><input type="time" class="s-in" id="s-open" style="margin:0"></div>
+      <div><label class="form-label">Heure d'ouverture</label><input type="time" class="s-in" id="s-open" style="margin:0"></div>
       <div><label class="form-label">Dernière réservation</label><input type="time" class="s-in" id="s-close" style="margin:0"></div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-top:12px"><button class="btn-save" onclick="saveHours()">Sauvegarder</button><span class="save-msg" id="msg-hours">✓</span></div>
@@ -707,7 +721,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
 function ld(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
-var DEFS={pauseMode:false,pauseMsg:'Le salon est temporairement fermé. À très bientôt !',prixCoupe:18,prixCombo:23,hourOpen:'10:00',hourClose:'16:30',shopName:'Sami Barber',shopAddr:'18 cours Charlemagne, Lyon 2',shopPhone:'',tiktok:'https://www.tiktok.com/@samibarber69?_r=1&_t=ZN-95tqV4jEXva',instagram:'https://www.instagram.com/sami._barber69?igsh=MWdoNmo3c2p6dHFwNA==',snapchat:'https://snapchat.com/t/rz2WSqJb',adminCode:'SamiBarber2026'};
+var DEFS={pauseMode:false,pauseMsg:'Le salon est temporairement fermé. À très bientôt !',prixCoupe:18,prixCombo:23,hourOpen:'10:00',hourClose:'16:30',openDays:[3,4,5,6],shopName:'Sami Barber',shopAddr:'18 cours Charlemagne, Lyon 2',shopPhone:'',tiktok:'https://www.tiktok.com/@samibarber69?_r=1&_t=ZN-95tqV4jEXva',instagram:'https://www.instagram.com/sami._barber69?igsh=MWdoNmo3c2p6dHFwNA==',snapchat:'https://snapchat.com/t/rz2WSqJb',adminCode:'SamiBarber2026'};
 var S=ld('sb_s',DEFS);
 Object.keys(DEFS).forEach(function(k){if(S[k]===undefined)S[k]=DEFS[k];});
 var appts=ld('sb_a',[]);
@@ -720,7 +734,7 @@ var _n=new Date();cY=_n.getFullYear();cM=_n.getMonth();
 
 document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('footer-year').textContent=new Date().getFullYear();
-  applyPause();applySocial();renderCal();fillTimeSelect();fillSettings();
+  applyPause();applySocial();applyHours();applyShopInfo();renderCal();fillTimeSelect();fillSettings();
   var clks=0,tmr=null;
   document.getElementById('footer-secret').addEventListener('click',function(){
     clks++;clearTimeout(tmr);tmr=setTimeout(function(){clks=0;},3000);
@@ -798,7 +812,7 @@ function selSvc(s){
 /* Date utils */
 function dstr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function fmtD(s){return new Date(s+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}
-function isOpen(d){var w=d.getDay();return w>=3&&w<=6;}
+function isOpen(d){return (S.openDays||[3,4,5,6]).indexOf(d.getDay())>=0;}
 function isBlk(s){return blocked.some(function(b){return b.date===s;});}
 function isPast(d){var t=new Date();t.setHours(0,0,0,0);return d<t;}
 
@@ -1016,6 +1030,18 @@ function fillSettings(){
   document.getElementById('s-tiktok').value=S.tiktok||'';
   document.getElementById('s-insta').value=S.instagram||'';
   document.getElementById('s-snap').value=S.snapchat||'';
+  /* Remplir les checkboxes des jours */
+  var days=S.openDays||[3,4,5,6];
+  document.querySelectorAll('#day-checkboxes input[type=checkbox]').forEach(function(cb){
+    var v=parseInt(cb.value);
+    cb.checked=days.indexOf(v)>=0;
+    cb.closest('.day-chk').classList.toggle('active',cb.checked);
+  });
+}
+function updateDayPreview(){
+  document.querySelectorAll('#day-checkboxes input[type=checkbox]').forEach(function(cb){
+    cb.closest('.day-chk').classList.toggle('active',cb.checked);
+  });
 }
 function togglePause(){S.pauseMode=!S.pauseMode;document.getElementById('toggle-pause').classList.toggle('on',S.pauseMode);saveAll();applyPause();}
 function savePauseMsg(){S.pauseMsg=document.getElementById('s-pmsg').value.trim()||S.pauseMsg;saveAll();applyPause();showMsg('msg-pmsg');}
@@ -1027,8 +1053,86 @@ function savePrices(){
   document.getElementById('pp-coupe').textContent=S.prixCoupe+'€';
   document.getElementById('pp-combo').textContent=S.prixCombo+'€';
 }
-function saveHours(){S.hourOpen=document.getElementById('s-open').value||'10:00';S.hourClose=document.getElementById('s-close').value||'16:30';saveAll();showMsg('msg-hours');fillTimeSelect();}
-function saveShop(){S.shopName=document.getElementById('s-name').value.trim()||S.shopName;S.shopAddr=document.getElementById('s-addr').value.trim()||S.shopAddr;S.shopPhone=document.getElementById('s-phone').value.trim();saveAll();showMsg('msg-shop');}
+function saveHours(){
+  /* Récupérer les jours cochés */
+  var days=[];
+  document.querySelectorAll('#day-checkboxes input[type=checkbox]').forEach(function(cb){
+    if(cb.checked) days.push(parseInt(cb.value));
+  });
+  if(days.length===0){showDlg('Sélectionnez au moins un jour d\'ouverture.','ℹ️',null);return;}
+  S.openDays=days;
+  S.hourOpen=document.getElementById('s-open').value||'10:00';
+  S.hourClose=document.getElementById('s-close').value||'16:30';
+  saveAll();
+  applyHours();
+  fillTimeSelect();
+  renderCal();
+  showMsg('msg-hours');
+}
+function applyHours(){
+  /* Mettre à jour la liste des horaires sur le site */
+  var DAY_NAMES=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  var DAY_IDS=[0,1,2,3,4,5,6];
+  var days=S.openDays||[3,4,5,6];
+  /* Formater les heures pour affichage */
+  function fmtH(t){
+    var p=t.split(':');
+    var h=parseInt(p[0]),m=parseInt(p[1]);
+    return h+'h'+(m>0?String(m).padStart(2,'0'):'');
+  }
+  var openStr=fmtH(S.hourOpen||'10:00')+' – '+fmtH(S.hourClose||'16:30').replace(':','h');
+  /* Note: fermeture = S.hourClose + 30min de prestation */
+  var closeH=parseInt((S.hourClose||'16:30').split(':')[0]);
+  var closeM=parseInt((S.hourClose||'16:30').split(':')[1]);
+  closeM+=30; if(closeM>=60){closeH++;closeM-=60;}
+  var closeDisplay=closeH+'h'+(closeM>0?String(closeM).padStart(2,'0'):'');
+  var rangeStr=fmtH(S.hourOpen||'10:00')+' – '+closeDisplay;
+
+  DAY_IDS.forEach(function(d){
+    var row=document.getElementById('hr-'+d);
+    var timeEl=document.getElementById('ht-'+d);
+    if(!row||!timeEl) return;
+    var isOp=days.indexOf(d)>=0;
+    row.className='hours-row '+(isOp?'open':'closed');
+    timeEl.textContent=isOp?rangeStr:'Fermé';
+  });
+}
+function saveShop(){
+  var name=document.getElementById('s-name').value.trim();
+  var addr=document.getElementById('s-addr').value.trim();
+  var phone=document.getElementById('s-phone').value.trim();
+  if(name) S.shopName=name;
+  if(addr) S.shopAddr=addr;
+  S.shopPhone=phone;
+  saveAll();
+  applyShopInfo();
+  showMsg('msg-shop');
+}
+function applyShopInfo(){
+  /* Mettre à jour le nom du salon */
+  var nameEl=document.getElementById('site-footer-name');
+  if(nameEl) nameEl.textContent=S.shopName;
+  var navLogo=document.querySelector('.nav-logo');
+  if(navLogo){
+    var span=navLogo.querySelector('span');
+    navLogo.childNodes[0].nodeValue=S.shopName+' ';
+    /* garder le span Lyon 2 */
+  }
+  /* Mettre à jour l'adresse */
+  var addrParts=S.shopAddr.split(',');
+  var line1=addrParts[0]?addrParts[0].trim():S.shopAddr;
+  var line2=addrParts.slice(1).join(',').trim();
+  var mainEl=document.getElementById('site-addr-main');
+  var cityEl=document.getElementById('site-addr-city');
+  if(mainEl) mainEl.textContent=line1;
+  if(cityEl) cityEl.textContent=line2||'';
+  /* Mettre à jour le lien Google Maps */
+  var mapLink=document.getElementById('site-maps-link');
+  if(mapLink) mapLink.href='https://maps.google.com/?q='+encodeURIComponent(S.shopAddr);
+  /* Mettre à jour le message de confirmation */
+  var subEl=document.getElementById('site-success-sub');
+  if(subEl) subEl.innerHTML='À très bientôt chez '+S.shopName+'.<br>'+S.shopAddr;
+}
 function savePwd(){
   var p1=document.getElementById('s-pwd1').value,p2=document.getElementById('s-pwd2').value,err=document.getElementById('err-pwd');
   err.textContent='';
@@ -1037,7 +1141,7 @@ function savePwd(){
   S.adminCode=p1;saveAll();document.getElementById('s-pwd1').value='';document.getElementById('s-pwd2').value='';showMsg('msg-pwd');
 }
 function saveSocial(){S.tiktok=document.getElementById('s-tiktok').value.trim();S.instagram=document.getElementById('s-insta').value.trim();S.snapchat=document.getElementById('s-snap').value.trim();saveAll();applySocial();showMsg('msg-social');}
-function askReset(){showDlg('Réinitialiser tous les paramètres ?','↺',function(){S=Object.assign({},DEFS);saveAll();fillSettings();applyPause();applySocial();});}
+function askReset(){showDlg('Réinitialiser tous les paramètres ?','↺',function(){S=Object.assign({},DEFS);saveAll();fillSettings();applyPause();applySocial();applyHours();applyShopInfo();});}
 function showMsg(id){
   /* inline save-msg (keep for reference but may not show on iOS) */
   var el=document.getElementById(id);
