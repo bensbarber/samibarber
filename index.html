@@ -15,9 +15,17 @@
   button { -webkit-appearance:none; appearance:none; }
   img  { display:block; max-width:100%; }
 
-#pause-banner { display:none; background:linear-gradient(135deg,#5a1a1a,#3a0f0f); border-bottom:2px solid #c0392b; padding:16px 24px; text-align:center; font-size:15px; font-weight:500; color:#ffd0cc; }
-#pause-banner.show { display:block; }
-#pause-banner strong { color:#ff9090; }
+/* PAUSE BANNER - banderole qui défile */
+#pause-banner { display:none; background:linear-gradient(135deg,#5a1a1a,#8b0000); border-bottom:3px solid #c0392b; padding:0; overflow:hidden; position:relative; z-index:200; height:44px; }
+#pause-banner.show { display:flex; align-items:center; }
+.marquee-track { display:flex; align-items:center; white-space:nowrap; animation:marquee 18s linear infinite; gap:0; }
+.marquee-track span { color:#ffd0cc; font-size:14px; font-weight:600; padding:0 60px; }
+.marquee-track span strong { color:#ff9090; }
+.marquee-track span em { color:#ffb3b3; font-style:normal; margin:0 16px; }
+@keyframes marquee {
+0%   { transform: translateX(0); }
+100% { transform: translateX(-50%); }
+}
 
 nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; background:rgba(8,8,7,0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.06); transition:padding .3s; }
 nav.scrolled { padding:12px 40px; }
@@ -401,6 +409,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
       <div class="pause-msg" id="pause-msg-text"></div>
     </div>
 
+```
 <div class="booking-steps" id="booking-steps">
   <div class="step active" id="si-1"><div class="step-num">1</div><span class="step-label">Service</span></div>
   <div class="step-sep"></div>
@@ -480,6 +489,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
   <br><br>
   <button class="btn-next" style="margin:auto;display:block" onclick="resetBook()">Nouveau rendez-vous</button>
 </div>
+```
 
   </div>
 </section>
@@ -491,13 +501,13 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
     <span class="s-label">Horaires</span>
     <h2 class="info-title">Quand nous <em style="font-style:italic;color:#e8b84b">trouver</em></h2>
     <ul class="hours-list" id="site-hours-list">
-      <li class="hours-row closed" id="hr-0"><span class="hours-day">Lundi</span><span class="hours-time" id="ht-0">Fermé</span></li>
-      <li class="hours-row closed" id="hr-1"><span class="hours-day">Mardi</span><span class="hours-time" id="ht-1">Fermé</span></li>
+      <li class="hours-row closed" id="hr-1"><span class="hours-day">Lundi</span><span class="hours-time" id="ht-1">Fermé</span></li>
+      <li class="hours-row closed" id="hr-2"><span class="hours-day">Mardi</span><span class="hours-time" id="ht-2">Fermé</span></li>
       <li class="hours-row open"   id="hr-3"><span class="hours-day">Mercredi</span><span class="hours-time" id="ht-3">10h – 17h</span></li>
       <li class="hours-row open"   id="hr-4"><span class="hours-day">Jeudi</span><span class="hours-time" id="ht-4">10h – 17h</span></li>
       <li class="hours-row open"   id="hr-5"><span class="hours-day">Vendredi</span><span class="hours-time" id="ht-5">10h – 17h</span></li>
       <li class="hours-row open"   id="hr-6"><span class="hours-day">Samedi</span><span class="hours-time" id="ht-6">10h – 17h</span></li>
-      <li class="hours-row closed" id="hr-2"><span class="hours-day">Dimanche</span><span class="hours-time" id="ht-2">Fermé</span></li>
+      <li class="hours-row closed" id="hr-0"><span class="hours-day">Dimanche</span><span class="hours-time" id="ht-0">Fermé</span></li>
     </ul>
   </div>
   <div>
@@ -574,6 +584,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
       <button class="tab-btn" onclick="switchTab('settings',this)">⚙ Paramètres</button>
     </div>
 
+```
 <div class="tab-panel active" id="tab-rdv">
   <div class="search-bar">
     <input type="text" class="search-input" id="s-search" placeholder="🔍 Nom, téléphone..." oninput="renderTable()">
@@ -712,6 +723,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
     </div>
   </div>
 </div>
+```
 
   </div>
 </div>
@@ -1046,12 +1058,22 @@ function updateDayPreview(){
 function togglePause(){S.pauseMode=!S.pauseMode;document.getElementById('toggle-pause').classList.toggle('on',S.pauseMode);saveAll();applyPause();}
 function savePauseMsg(){S.pauseMsg=document.getElementById('s-pmsg').value.trim()||S.pauseMsg;saveAll();applyPause();showMsg('msg-pmsg');}
 function savePrices(){
-  var c=parseFloat(document.getElementById('s-coupe').value),b=parseFloat(document.getElementById('s-combo').value);
-  if(c>0)S.prixCoupe=c;if(b>0)S.prixCombo=b;saveAll();showMsg('msg-prices');
-  document.getElementById('dp-coupe').innerHTML='<sup>€</sup>'+S.prixCoupe;
-  document.getElementById('dp-combo').innerHTML='<sup>€</sup>'+S.prixCombo;
-  document.getElementById('pp-coupe').textContent=S.prixCoupe+'€';
-  document.getElementById('pp-combo').textContent=S.prixCombo+'€';
+  var c=parseFloat(document.getElementById('s-coupe').value);
+  var b=parseFloat(document.getElementById('s-combo').value);
+  if(c>0) S.prixCoupe=c;
+  if(b>0) S.prixCombo=b;
+  saveAll();
+  /* Mise à jour section services */
+  var dpC=document.getElementById('dp-coupe');
+  var dpB=document.getElementById('dp-combo');
+  if(dpC) dpC.innerHTML='<sup>€</sup>'+S.prixCoupe;
+  if(dpB) dpB.innerHTML='<sup>€</sup>'+S.prixCombo;
+  /* Mise à jour sélecteur de réservation */
+  var ppC=document.getElementById('pp-coupe');
+  var ppB=document.getElementById('pp-combo');
+  if(ppC) ppC.textContent=S.prixCoupe+'€';
+  if(ppB) ppB.textContent=S.prixCombo+'€';
+  showMsg('msg-prices');
 }
 function saveHours(){
   /* Récupérer les jours cochés */
