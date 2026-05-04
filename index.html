@@ -15,17 +15,14 @@
   button { -webkit-appearance:none; appearance:none; }
   img  { display:block; max-width:100%; }
 
-/* PAUSE BANNER - banderole qui défile */
-#pause-banner { display:none; background:linear-gradient(135deg,#5a1a1a,#8b0000); border-bottom:3px solid #c0392b; padding:0; overflow:hidden; position:relative; z-index:200; height:44px; }
-#pause-banner.show { display:flex; align-items:center; }
-.marquee-track { display:flex; align-items:center; white-space:nowrap; animation:marquee 18s linear infinite; gap:0; }
-.marquee-track span { color:#ffd0cc; font-size:14px; font-weight:600; padding:0 60px; }
-.marquee-track span strong { color:#ff9090; }
-.marquee-track span em { color:#ffb3b3; font-style:normal; margin:0 16px; }
-@keyframes marquee {
-0%   { transform: translateX(0); }
-100% { transform: translateX(-50%); }
-}
+/* PAUSE BANNER */
+#pause-banner { display:none; background:#7a0000; border-bottom:3px solid #c0392b; height:46px; overflow:hidden; position:relative; z-index:200; }
+#pause-banner.show { display:block; }
+.marquee-wrap { position:absolute; inset:0; display:flex; align-items:center; overflow:hidden; }
+.marquee-track { display:flex; align-items:center; white-space:nowrap; -webkit-animation:marquee 20s linear infinite; animation:marquee 20s linear infinite; width:max-content; }
+.marquee-track span { color:#ffd0cc; font-size:14px; font-weight:600; padding:0 48px; display:inline-block; }
+@-webkit-keyframes marquee { 0%{-webkit-transform:translateX(0);transform:translateX(0);} 100%{-webkit-transform:translateX(-50%);transform:translateX(-50%);} }
+@keyframes marquee { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
 
 nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; background:rgba(8,8,7,0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.06); transition:padding .3s; }
 nav.scrolled { padding:12px 40px; }
@@ -326,9 +323,18 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
 </head>
 <body>
 
-<!-- PAUSE BANNER -->
+<!-- PAUSE BANNER (structure statique, contenu mis à jour par JS) -->
 
-<div id="pause-banner"></div>
+<div id="pause-banner">
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span id="marquee-txt-1"></span>
+      <span id="marquee-txt-2"></span>
+      <span id="marquee-txt-3"></span>
+      <span id="marquee-txt-4"></span>
+    </div>
+  </div>
+</div>
 
 <!-- NAVBAR -->
 
@@ -409,6 +415,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
       <div class="pause-msg" id="pause-msg-text"></div>
     </div>
 
+```
 <div class="booking-steps" id="booking-steps">
   <div class="step active" id="si-1"><div class="step-num">1</div><span class="step-label">Service</span></div>
   <div class="step-sep"></div>
@@ -742,6 +749,7 @@ var _n=new Date();cY=_n.getFullYear();cM=_n.getMonth();
 
 document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('footer-year').textContent=new Date().getFullYear();
+  applyPrices();
   applyPause();applySocial();applyHours();applyShopInfo();renderCal();fillTimeSelect();fillSettings();
   var clks=0,tmr=null;
   document.getElementById('footer-secret').addEventListener('click',function(){
@@ -760,7 +768,12 @@ function applyPause(){
   var bs2=document.getElementById('booking-steps');
   var pmt=document.getElementById('pause-msg-text');
   if(S.pauseMode){
-    b.innerHTML='<strong>⚠️ Salon temporairement fermé</strong> — '+S.pauseMsg;
+    /* Mettre à jour le texte des 4 spans du marquee (déjà dans le DOM) */
+    var msg='⚠️ SALON FERMÉ  ✦  '+S.pauseMsg+'  ✦  ';
+    ['marquee-txt-1','marquee-txt-2','marquee-txt-3','marquee-txt-4'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el) el.textContent=msg;
+    });
     b.classList.add('show');
     if(bp){bp.classList.add('show');if(pmt)pmt.textContent=S.pauseMsg;}
     if(bs2)bs2.style.display='none';
@@ -1053,22 +1066,25 @@ function updateDayPreview(){
 }
 function togglePause(){S.pauseMode=!S.pauseMode;document.getElementById('toggle-pause').classList.toggle('on',S.pauseMode);saveAll();applyPause();}
 function savePauseMsg(){S.pauseMsg=document.getElementById('s-pmsg').value.trim()||S.pauseMsg;saveAll();applyPause();showMsg('msg-pmsg');}
+function applyPrices(){
+  /* Section services */
+  var dpC=document.getElementById('dp-coupe');
+  var dpB=document.getElementById('dp-combo');
+  if(dpC) dpC.innerHTML='<sup>€</sup>'+S.prixCoupe;
+  if(dpB) dpB.innerHTML='<sup>€</sup>'+S.prixCombo;
+  /* Sélecteur de réservation (étape 1) */
+  var ppC=document.getElementById('pp-coupe');
+  var ppB=document.getElementById('pp-combo');
+  if(ppC) ppC.textContent=S.prixCoupe+'€';
+  if(ppB) ppB.textContent=S.prixCombo+'€';
+}
 function savePrices(){
   var c=parseFloat(document.getElementById('s-coupe').value);
   var b=parseFloat(document.getElementById('s-combo').value);
   if(c>0) S.prixCoupe=c;
   if(b>0) S.prixCombo=b;
   saveAll();
-  /* Mise à jour section services */
-  var dpC=document.getElementById('dp-coupe');
-  var dpB=document.getElementById('dp-combo');
-  if(dpC) dpC.innerHTML='<sup>€</sup>'+S.prixCoupe;
-  if(dpB) dpB.innerHTML='<sup>€</sup>'+S.prixCombo;
-  /* Mise à jour sélecteur de réservation */
-  var ppC=document.getElementById('pp-coupe');
-  var ppB=document.getElementById('pp-combo');
-  if(ppC) ppC.textContent=S.prixCoupe+'€';
-  if(ppB) ppB.textContent=S.prixCombo+'€';
+  applyPrices();
   showMsg('msg-prices');
 }
 function saveHours(){
