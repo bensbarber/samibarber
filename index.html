@@ -293,6 +293,24 @@ footer { padding:44px 40px; border-top:1px solid rgba(255,255,255,0.06); display
 .pwd-wrap .s-in { margin:0; padding-right:46px; }
 .pwd-eye { position:absolute; right:11px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#4a4a44; font-size:15px; padding:4px; }
 
+/* MON RDV */
+#mon-rdv { padding:120px 40px; max-width:700px; margin:0 auto; }
+@media(max-width:768px){ #mon-rdv { padding:80px 20px; } }
+
+/* PDF PRINT */
+#pdf-print-area { display:none; }
+@media print {
+body * { visibility:hidden; }
+#pdf-print-area, #pdf-print-area * { visibility:visible; }
+#pdf-print-area { display:block !important; position:fixed; inset:0; background:#fff; color:#111; padding:24px; }
+#pdf-print-area h1 { font-size:20px; margin-bottom:6px; color:#111; }
+#pdf-print-area p { font-size:12px; color:#555; margin-bottom:14px; }
+#pdf-print-area table { width:100%; border-collapse:collapse; font-size:11px; }
+#pdf-print-area th { background:#222; color:#fff; padding:7px 8px; text-align:left; }
+#pdf-print-area td { padding:6px 8px; border-bottom:1px solid #ddd; color:#111; }
+#pdf-print-area tr:nth-child(even) td { background:#f7f7f7; }
+}
+
 @keyframes fadeUp  { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
 @keyframes fadeIn  { from { opacity:0; } to { opacity:1; } }
 @keyframes scrollPulse { 0%,100% { opacity:.25; } 50% { opacity:1; } }
@@ -330,6 +348,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
   <div class="nav-links">
     <a href="#services">Services</a>
     <a href="#booking">Réservation</a>
+    <a href="#mon-rdv">Mon RDV</a>
     <a href="#info">Infos</a>
     <div class="social-links">
       <a class="social-link tiktok" id="sl-tiktok" href="https://www.tiktok.com/@samibarber69?_r=1&_t=ZN-95tqV4jEXva" target="_blank" rel="noopener" title="TikTok">
@@ -498,6 +517,58 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
   </div>
 </section>
 
+<!-- MON RDV -->
+
+<section id="mon-rdv">
+  <div class="rdv-inner">
+    <span class="s-label">Votre rendez-vous</span>
+    <h2 class="s-title" style="margin-bottom:32px">Mon <em>rendez-vous</em></h2>
+
+<!-- Lookup form -->
+<div id="rdv-lookup-form">
+  <p style="font-size:15px;color:#7a7970;margin-bottom:24px;line-height:1.6">Entrez votre référence de réservation (reçue à la confirmation) pour consulter ou annuler votre RDV.</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start">
+    <div style="flex:1;min-width:200px">
+      <input type="text" class="form-input" id="rdv-ref-input" placeholder="Ex: SBA3F2B" style="text-transform:uppercase;letter-spacing:3px;font-family:monospace;font-size:16px" oninput="this.value=this.value.toUpperCase()">
+    </div>
+    <button class="btn-next" style="margin-left:0;margin-top:0" onclick="lookupRdv()">Rechercher</button>
+  </div>
+  <p id="rdv-lookup-error" style="color:#ff6b6b;font-size:13px;margin-top:10px;min-height:18px"></p>
+</div>
+
+<!-- Result card -->
+<div id="rdv-result" style="display:none;margin-top:8px">
+  <div class="recap-box">
+    <div class="recap-title" id="rdv-result-title">Votre rendez-vous</div>
+    <div class="recap-row"><span>Référence</span><span id="rdv-res-ref" style="font-family:monospace;letter-spacing:2px;color:#e8b84b"></span></div>
+    <div class="recap-row"><span>Service</span><span id="rdv-res-service"></span></div>
+    <div class="recap-row"><span>Date</span><span id="rdv-res-date"></span></div>
+    <div class="recap-row"><span>Horaire</span><span id="rdv-res-time"></span></div>
+    <div class="recap-row"><span>Prix</span><span id="rdv-res-price" style="color:#e8b84b;font-family:'Playfair Display',serif;font-size:18px"></span></div>
+    <div class="recap-row" id="rdv-res-note-row"><span>Note</span><span id="rdv-res-note" style="color:#7a7970"></span></div>
+  </div>
+  <div id="rdv-cancel-zone">
+    <p style="font-size:13px;color:#7a7970;margin-bottom:14px">Ce RDV est encore à venir. Vous pouvez l'annuler ci-dessous.</p>
+    <button class="btn-danger" style="border-radius:6px" onclick="askCancelRdv()">🗑 Annuler ce rendez-vous</button>
+  </div>
+  <div id="rdv-past-notice" style="display:none">
+    <p style="font-size:13px;color:#4a4a44;font-style:italic">Ce rendez-vous est passé.</p>
+  </div>
+  <br>
+  <button class="btn-back" onclick="resetLookup()" style="margin-top:4px">← Nouvelle recherche</button>
+</div>
+
+<!-- Cancelled confirmation -->
+<div id="rdv-cancelled" style="display:none;text-align:center;padding:40px 0">
+  <div style="font-size:40px;margin-bottom:14px">✅</div>
+  <h3 style="font-family:'Playfair Display',serif;font-size:26px;color:#f0ede6;margin-bottom:8px">RDV annulé</h3>
+  <p style="color:#7a7970;font-size:15px;margin-bottom:24px">Votre rendez-vous a bien été annulé.</p>
+  <button class="btn-next" style="margin:auto;display:block" onclick="resetLookup()">Retour</button>
+</div>
+
+  </div>
+</section>
+
 <!-- INFO -->
 
 <section id="info">
@@ -544,6 +615,17 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
   <div>© <span id="footer-year"></span> <span id="footer-secret">Sami Barber</span></div>
 </footer>
 
+<!-- PDF PRINT AREA (caché sauf à l'impression) -->
+
+<div id="pdf-print-area">
+  <h1>📋 Rendez-vous — <span id="pdf-shop-name">Sami Barber</span></h1>
+  <p id="pdf-date-generated"></p>
+  <table>
+    <thead><tr><th>Date</th><th>Heure</th><th>Nom</th><th>Téléphone</th><th>Service</th><th>Prix</th><th>Note</th></tr></thead>
+    <tbody id="pdf-tbody"></tbody>
+  </table>
+</div>
+
 <!-- DIALOG -->
 
 <div id="custom-dialog">
@@ -583,6 +665,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
     <div class="admin-tabs">
       <button class="tab-btn active" onclick="switchTab('rdv',this)">📋 Rendez-vous</button>
       <button class="tab-btn" onclick="switchTab('stats',this)">📊 Stats</button>
+      <button class="tab-btn" onclick="switchTab('clients',this)">👤 Clients</button>
       <button class="tab-btn" onclick="switchTab('blocked',this)">📅 Dates bloquées</button>
       <button class="tab-btn" onclick="switchTab('manual',this)">➕ RDV Manuel</button>
       <button class="tab-btn" onclick="switchTab('settings',this)">⚙ Paramètres</button>
@@ -596,6 +679,7 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
       <option value="all">Tous</option><option value="future">À venir</option><option value="past">Passés</option>
     </select>
     <button class="btn-export" onclick="exportCSV()">⬇ CSV</button>
+    <button class="btn-export" onclick="exportPDF()" style="background:rgba(196,150,42,0.1);border-color:rgba(196,150,42,0.3);color:#e8b84b">⬇ PDF</button>
     <button class="btn-danger" style="padding:10px 12px" onclick="askClearPast()">🗑 Passés</button>
   </div>
   <div style="overflow-x:auto;background:#111110;border:1px solid rgba(255,255,255,0.07);border-radius:10px">
@@ -611,6 +695,24 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
   <div style="background:#111110;border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:22px">
     <h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:18px;color:#7a7970">Revenus par service</h3>
     <div id="rev-bars"></div>
+  </div>
+</div>
+
+<!-- TAB CLIENTS -->
+<div class="tab-panel" id="tab-clients">
+  <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+    <input type="text" class="search-input" id="client-search" placeholder="🔍 Rechercher un client..." oninput="renderClients()">
+    <select class="search-select" id="client-sort" onchange="renderClients()">
+      <option value="visits">Trier : plus de visites</option>
+      <option value="recent">Trier : plus récent</option>
+      <option value="alpha">Trier : A → Z</option>
+    </select>
+  </div>
+  <div style="overflow-x:auto;background:#111110;border:1px solid rgba(255,255,255,0.07);border-radius:10px">
+    <table class="appt-table">
+      <thead><tr><th>Client</th><th>Téléphone</th><th>Visites</th><th>Services</th><th>Dépenses</th><th>Dernier RDV</th><th>Prochain RDV</th></tr></thead>
+      <tbody id="clients-tbody"></tbody>
+    </table>
   </div>
 </div>
 
@@ -966,6 +1068,7 @@ function switchTab(t,btn){
   btn.classList.add('active');
   if(t==='rdv')renderTable();
   if(t==='stats')renderStats();
+  if(t==='clients')renderClients();
   if(t==='blocked')renderBlocked();
 }
 function loadDash(){renderTable();renderStats();renderBlocked();fillSettings();}
@@ -1195,7 +1298,135 @@ function showMsg(id){
   setTimeout(function(){toast.classList.remove('show');},2000);
 }
 
-/* EXPORT */
+/* ====================================================
+   MON RDV — Lookup & Cancel
+   ==================================================== */
+var _currentLookupId = null;
+
+function lookupRdv(){
+  var ref = document.getElementById('rdv-ref-input').value.trim().toUpperCase();
+  var errEl = document.getElementById('rdv-lookup-error');
+  errEl.textContent = '';
+  if(!ref || ref.length < 4){ errEl.textContent = 'Entrez votre référence de réservation.'; return; }
+  var appt = appts.find(function(a){ return a.id === ref; });
+  if(!appt){ errEl.textContent = 'Aucun rendez-vous trouvé pour cette référence.'; return; }
+  _currentLookupId = appt.id;
+  /* Remplir la fiche */
+  document.getElementById('rdv-res-ref').textContent = appt.id;
+  document.getElementById('rdv-res-service').textContent = appt.service==='coupe'?'La Coupe':'Coupe + Barbe';
+  document.getElementById('rdv-res-date').textContent = fmtD(appt.date);
+  document.getElementById('rdv-res-time').textContent = appt.time;
+  document.getElementById('rdv-res-price').textContent = (appt.service==='coupe'?S.prixCoupe:S.prixCombo)+'€';
+  var noteRow = document.getElementById('rdv-res-note-row');
+  if(appt.note){ document.getElementById('rdv-res-note').textContent = appt.note; noteRow.style.display=''; }
+  else noteRow.style.display='none';
+  /* Futur ou passé ? */
+  var now = new Date(); now.setHours(0,0,0,0);
+  var apptDate = new Date(appt.date+'T12:00:00');
+  var isFuture = apptDate >= now;
+  document.getElementById('rdv-cancel-zone').style.display = isFuture ? 'block' : 'none';
+  document.getElementById('rdv-past-notice').style.display = isFuture ? 'none' : 'block';
+  /* Afficher le résultat */
+  document.getElementById('rdv-lookup-form').style.display = 'none';
+  document.getElementById('rdv-result').style.display = 'block';
+  document.getElementById('rdv-cancelled').style.display = 'none';
+}
+
+function askCancelRdv(){
+  showDlg('Annuler ce rendez-vous ? Cette action est irréversible.', '🗑', function(){
+    appts = appts.filter(function(a){ return a.id !== _currentLookupId; });
+    saveAll();
+    document.getElementById('rdv-result').style.display = 'none';
+    document.getElementById('rdv-cancelled').style.display = 'block';
+    _currentLookupId = null;
+  });
+}
+
+function resetLookup(){
+  _currentLookupId = null;
+  document.getElementById('rdv-ref-input').value = '';
+  document.getElementById('rdv-lookup-error').textContent = '';
+  document.getElementById('rdv-lookup-form').style.display = 'block';
+  document.getElementById('rdv-result').style.display = 'none';
+  document.getElementById('rdv-cancelled').style.display = 'none';
+}
+
+/* ====================================================
+   HISTORIQUE CLIENTS
+   ==================================================== */
+function renderClients(){
+  var q = (document.getElementById('client-search')&&document.getElementById('client-search').value||'').toLowerCase();
+  var sort = document.getElementById('client-sort')&&document.getElementById('client-sort').value||'visits';
+  /* Regrouper par téléphone */
+  var clientMap = {};
+  appts.forEach(function(a){
+    var key = a.tel;
+    if(!clientMap[key]){
+      clientMap[key] = {prenom:a.prenom, nom:a.nom, tel:a.tel, visites:0, coupe:0, combo:0, depenses:0, lastDate:'', nextDate:''};
+    }
+    var c = clientMap[key];
+    c.visites++;
+    if(a.service==='coupe'){ c.coupe++; c.depenses+=S.prixCoupe; }
+    else { c.combo++; c.depenses+=S.prixCombo; }
+    var now = new Date(); now.setHours(0,0,0,0);
+    var apptDate = new Date(a.date+'T12:00:00');
+    if(apptDate < now){ if(!c.lastDate || a.date > c.lastDate) c.lastDate = a.date; }
+    else { if(!c.nextDate || a.date < c.nextDate) c.nextDate = a.date; }
+  });
+  var list = Object.values(clientMap);
+  if(q) list = list.filter(function(c){ return (c.prenom+' '+c.nom).toLowerCase().indexOf(q)>=0 || c.tel.indexOf(q)>=0; });
+  if(sort==='visits') list.sort(function(a,b){ return b.visites - a.visites; });
+  else if(sort==='recent') list.sort(function(a,b){ var da=a.nextDate||a.lastDate, db=b.nextDate||b.lastDate; return db.localeCompare(da); });
+  else list.sort(function(a,b){ return (a.nom||'').localeCompare(b.nom||''); });
+  var tb = document.getElementById('clients-tbody');
+  if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty-msg">Aucun client trouvé</td></tr>'; return; }
+  tb.innerHTML = list.map(function(c){
+    var services = [];
+    if(c.coupe>0) services.push(c.coupe+' coupe'+(c.coupe>1?'s':''));
+    if(c.combo>0) services.push(c.combo+' coupe+barbe');
+    var stars = c.visites>=10?'🥇':c.visites>=5?'🥈':c.visites>=3?'🥉':'';
+    return '<tr>'
+      +'<td><strong>'+c.prenom+' '+c.nom+'</strong> '+stars+'</td>'
+      +'<td>'+c.tel+'</td>'
+      +'<td style="color:#e8b84b;font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700">'+c.visites+'</td>'
+      +'<td style="font-size:12px;color:#7a7970">'+services.join(', ')+'</td>'
+      +'<td style="color:#4cd980;font-weight:600">'+c.depenses+'€</td>'
+      +'<td style="font-size:12px;color:#7a7970">'+(c.lastDate?fmtD(c.lastDate).replace(/^\w+,?\s*/,''):'—')+'</td>'
+      +'<td style="font-size:12px;color:#74b4e8">'+(c.nextDate?fmtD(c.nextDate).replace(/^\w+,?\s*/,''):'—')+'</td>'
+      +'</tr>';
+  }).join('');
+}
+
+/* ====================================================
+   EXPORT PDF
+   ==================================================== */
+function exportPDF(){
+  var filter = document.getElementById('s-filter')&&document.getElementById('s-filter').value||'all';
+  var n0 = new Date(); n0.setHours(0,0,0,0);
+  var list = appts.slice().sort(function(a,b){ return (a.date+a.time).localeCompare(b.date+b.time); });
+  if(filter==='future') list = list.filter(function(a){ return new Date(a.date+'T12:00:00')>=n0; });
+  if(filter==='past')   list = list.filter(function(a){ return new Date(a.date+'T12:00:00')<n0; });
+  document.getElementById('pdf-shop-name').textContent = S.shopName||'Sami Barber';
+  document.getElementById('pdf-date-generated').textContent = 'Généré le '+new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})+' — '+list.length+' rendez-vous';
+  var tbody = document.getElementById('pdf-tbody');
+  tbody.innerHTML = list.map(function(a){
+    var fut = new Date(a.date+'T12:00:00')>=n0;
+    return '<tr>'
+      +'<td>'+fmtD(a.date).replace(/^\w+,?\s*/,'')+'</td>'
+      +'<td>'+a.time+'</td>'
+      +'<td>'+a.prenom+' '+a.nom+'</td>'
+      +'<td>'+a.tel+'</td>'
+      +'<td>'+(a.service==='coupe'?'Coupe':'Coupe + Barbe')+'</td>'
+      +'<td>'+(a.service==='coupe'?S.prixCoupe:S.prixCombo)+'€</td>'
+      +'<td>'+(a.note||'')+'</td>'
+      +'</tr>';
+  }).join('');
+  document.getElementById('pdf-print-area').style.display = 'block';
+  window.print();
+  setTimeout(function(){ document.getElementById('pdf-print-area').style.display='none'; }, 1000);
+}
+
+/* EXPORT CSV */
 function exportCSV(){
   var h=['ID','Date','Heure','Prénom','Nom','Téléphone','Service','Prix','Note','Créé le'];
   var rows=appts.map(function(a){return [a.id,a.date,a.time,a.prenom,a.nom,a.tel,a.service==='coupe'?'Coupe':'Coupe + Barbe',a.service==='coupe'?S.prixCoupe:S.prixCombo,a.note||'',a.created];});
