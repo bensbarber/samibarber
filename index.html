@@ -5,6 +5,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sami Barber — Lyon 2</title>
+<meta name="description" content="Barbier à Lyon 2 — 18 cours Charlemagne. Réservez en ligne.">
+<meta name="theme-color" content="#c4962a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sami Barber">
+
+<!-- Favicon SVG inline -->
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23080807'/><text y='.9em' font-size='80' x='10'>✂️</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23080807'/><text y='.9em' font-size='80' x='10'>✂️</text></svg>">
+
+<!-- PWA Manifest inline -->
+
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Sami%20Barber%22,%22short_name%22:%22Sami%20Barber%22,%22description%22:%22Barbier%20%C3%A0%20Lyon%202%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23080807%22,%22theme_color%22:%22%23c4962a%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23080807'/><text y='.9em' font-size='80' x='10'>✂️</text></svg>%22,%22sizes%22:%22any%22,%22type%22:%22image/svg+xml%22}]}">
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 
@@ -292,6 +307,33 @@ footer { padding:44px 40px; border-top:1px solid rgba(255,255,255,0.06); display
 .pwd-wrap { position:relative; margin-bottom:11px; }
 .pwd-wrap .s-in { margin:0; padding-right:46px; }
 .pwd-eye { position:absolute; right:11px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#4a4a44; font-size:15px; padding:4px; }
+
+/* AGENDA */
+.agenda-table { width:100%; border-collapse:collapse; min-width:520px; }
+.agenda-table th { padding:10px 6px; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#4a4a44; border-bottom:1px solid rgba(255,255,255,0.07); text-align:center; }
+.agenda-table th.today-col { color:#c4962a; }
+.agenda-table td { padding:3px 4px; vertical-align:top; border-right:1px solid rgba(255,255,255,0.04); width:calc(100%/8); }
+.agenda-table td:first-child { color:#4a4a44; font-size:11px; text-align:right; padding-right:10px; width:48px; border-right:1px solid rgba(255,255,255,0.07); white-space:nowrap; }
+.agenda-slot { min-height:28px; border-radius:4px; margin-bottom:2px; }
+.agenda-slot.free { background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.05); }
+.agenda-slot.booked { background:rgba(196,150,42,0.15); border:1px solid rgba(196,150,42,0.3); padding:4px 6px; cursor:pointer; }
+.agenda-slot.booked-combo { background:rgba(76,217,128,0.12); border:1px solid rgba(76,217,128,0.3); }
+.agenda-slot.blocked-slot { background:rgba(192,57,43,0.1); border:1px solid rgba(192,57,43,0.2); }
+.agenda-slot .ag-name { font-size:11px; font-weight:600; color:#f0ede6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.agenda-slot .ag-svc { font-size:10px; color:#7a7970; }
+.agenda-row-current td .agenda-slot.free { background:rgba(196,150,42,0.04); }
+
+/* BAR CHARTS */
+.bar-chart-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.bar-chart-label { font-size:12px; color:#7a7970; min-width:70px; text-align:right; }
+.bar-chart-bar-wrap { flex:1; background:#1a1a18; border-radius:4px; height:22px; overflow:hidden; }
+.bar-chart-bar { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:8px; font-size:11px; font-weight:600; color:#080807; min-width:28px; transition:width .5s; }
+.bar-chart-val { font-size:12px; color:#7a7970; min-width:40px; }
+
+@media(max-width:768px){
+.stats-grid { grid-template-columns:repeat(2,1fr); }
+#tab-stats > div:last-child { grid-template-columns:1fr !important; }
+}
 
 /* MON RDV */
 #mon-rdv { padding:120px 40px; max-width:700px; margin:0 auto; }
@@ -664,13 +706,14 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
     </div>
     <div class="admin-tabs">
       <button class="tab-btn active" onclick="switchTab('rdv',this)">📋 Rendez-vous</button>
+      <button class="tab-btn" onclick="switchTab('agenda',this)">📅 Agenda</button>
       <button class="tab-btn" onclick="switchTab('stats',this)">📊 Stats</button>
       <button class="tab-btn" onclick="switchTab('clients',this)">👤 Clients</button>
-      <button class="tab-btn" onclick="switchTab('blocked',this)">📅 Dates bloquées</button>
+      <button class="tab-btn" onclick="switchTab('blocked',this)">🚫 Dates bloquées</button>
       <button class="tab-btn" onclick="switchTab('manual',this)">➕ RDV Manuel</button>
       <button class="tab-btn" onclick="switchTab('settings',this)">⚙ Paramètres</button>
     </div>
-
+    
 <div class="tab-panel active" id="tab-rdv">
   <div class="search-bar">
     <input type="text" class="search-input" id="s-search" placeholder="🔍 Nom, téléphone..." oninput="renderTable()">
@@ -690,11 +733,37 @@ footer { padding:28px 20px; flex-direction:column; gap:12px; text-align:center; 
   </div>
 </div>
 
+<!-- TAB AGENDA -->
+<div class="tab-panel" id="tab-agenda">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="cal-nav" onclick="agendaPrevWeek()">←</button>
+      <span id="agenda-week-label" style="font-family:'Playfair Display',serif;font-size:18px;color:#f0ede6;min-width:220px;text-align:center"></span>
+      <button class="cal-nav" onclick="agendaNextWeek()">→</button>
+    </div>
+    <button class="btn-save" style="padding:9px 18px;font-size:12px" onclick="agendaGoToday()">Aujourd'hui</button>
+  </div>
+  <div id="agenda-grid" style="overflow-x:auto"></div>
+</div>
+
 <div class="tab-panel" id="tab-stats">
+  <!-- KPI Cards -->
   <div class="stats-grid" id="stats-grid"></div>
-  <div style="background:#111110;border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:22px">
-    <h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:18px;color:#7a7970">Revenus par service</h3>
-    <div id="rev-bars"></div>
+  <!-- Revenue chart -->
+  <div class="ss" style="margin-bottom:16px">
+    <div class="ss-title">💰 Revenus par mois</div>
+    <div style="position:relative;height:180px;margin-top:8px" id="chart-revenue"></div>
+  </div>
+  <!-- Day of week chart -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:0">
+    <div class="ss">
+      <div class="ss-title" style="font-size:16px">📅 Jour le plus chargé</div>
+      <div id="chart-days" style="margin-top:8px"></div>
+    </div>
+    <div class="ss">
+      <div class="ss-title" style="font-size:16px">✂️ Services</div>
+      <div id="chart-services" style="margin-top:8px"></div>
+    </div>
   </div>
 </div>
 
@@ -1067,11 +1136,12 @@ function switchTab(t,btn){
   document.getElementById('tab-'+t).classList.add('active');
   btn.classList.add('active');
   if(t==='rdv')renderTable();
+  if(t==='agenda')renderAgenda();
   if(t==='stats')renderStats();
   if(t==='clients')renderClients();
   if(t==='blocked')renderBlocked();
 }
-function loadDash(){renderTable();renderStats();renderBlocked();fillSettings();}
+function loadDash(){renderTable();renderBlocked();fillSettings();}
 
 /* TABLE */
 function renderTable(){
@@ -1095,17 +1165,128 @@ function delAppt(id){showDlg('Supprimer ce rendez-vous ?','🗑',function(){appt
 function askClearPast(){showDlg('Supprimer tous les rendez-vous passés ?','🗑',function(){var n=new Date();n.setHours(0,0,0,0);appts=appts.filter(function(a){return new Date(a.date+'T12:00:00')>=n;});saveAll();renderTable();renderStats();});}
 function askClearAll(){showDlg('Supprimer TOUS les rendez-vous ? Irréversible.','⚠️',function(){appts=[];saveAll();renderTable();renderStats();});}
 
-/* STATS */
+/* STATS AVANCÉES */
 function renderStats(){
-  var n=new Date();n.setHours(0,0,0,0);var ms=new Date(n.getFullYear(),n.getMonth(),1);
-  var tot=appts.length,fut=appts.filter(function(a){return new Date(a.date+'T12:00:00')>=n;}).length;
+  var n=new Date();n.setHours(0,0,0,0);
+  var ms=new Date(n.getFullYear(),n.getMonth(),1);
+  var ws=new Date(n);var dow=n.getDay();var diff=dow===0?-6:1-dow;ws.setDate(n.getDate()+diff);
+  var tot=appts.length;
+  var fut=appts.filter(function(a){return new Date(a.date+'T12:00:00')>=n;}).length;
   var mon=appts.filter(function(a){return new Date(a.date+'T12:00:00')>=ms;}).length;
+  var wk=appts.filter(function(a){var d=new Date(a.date+'T12:00:00');return d>=ws&&d<n;}).length;
   var rc=appts.filter(function(a){return a.service==='coupe';}).length;
   var rb=appts.filter(function(a){return a.service==='combo';}).length;
-  var rev=rc*S.prixCoupe+rb*S.prixCombo;
-  document.getElementById('stats-grid').innerHTML='<div class="stat-card"><div class="stat-val">'+tot+'</div><div class="stat-lbl">Total RDV</div></div><div class="stat-card"><div class="stat-val">'+fut+'</div><div class="stat-lbl">À venir</div></div><div class="stat-card"><div class="stat-val">'+mon+'</div><div class="stat-lbl">Ce mois</div></div><div class="stat-card"><div class="stat-val">'+rev+'€</div><div class="stat-lbl">Revenus</div></div>';
-  var mx=Math.max(rc,rb,1);
-  document.getElementById('rev-bars').innerHTML='<div style="margin-bottom:18px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px"><span style="color:#e8b84b">Coupe ('+rc+' × '+S.prixCoupe+'€)</span><strong>'+(rc*S.prixCoupe)+'€</strong></div><div style="background:#1a1a18;border-radius:4px;height:10px"><div style="background-color:#c4962a;height:100%;width:'+(rc/mx*100)+'%;border-radius:4px"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px"><span style="color:#4cd980">Coupe+Barbe ('+rb+' × '+S.prixCombo+'€)</span><strong>'+(rb*S.prixCombo)+'€</strong></div><div style="background:#1a1a18;border-radius:4px;height:10px"><div style="background-color:#4cd980;height:100%;width:'+(rb/mx*100)+'%;border-radius:4px"></div></div></div>';
+  var revTotal=rc*S.prixCoupe+rb*S.prixCombo;
+  var revMon=appts.filter(function(a){return new Date(a.date+'T12:00:00')>=ms;}).reduce(function(s,a){return s+(a.service==='coupe'?S.prixCoupe:S.prixCombo);},0);
+  var clientCount=Object.keys(appts.reduce(function(m,a){m[a.tel]=1;return m;},{})).length;
+  var avgPerClient=clientCount>0?Math.round(revTotal/clientCount):0;
+
+  document.getElementById('stats-grid').innerHTML=
+    '<div class="stat-card"><div class="stat-val">'+tot+'</div><div class="stat-lbl">Total RDV</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+fut+'</div><div class="stat-lbl">À venir</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+mon+'</div><div class="stat-lbl">Ce mois</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+revMon+'€</div><div class="stat-lbl">Revenus mois</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+revTotal+'€</div><div class="stat-lbl">Revenus totaux</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+avgPerClient+'€</div><div class="stat-lbl">Moy. / client</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+clientCount+'</div><div class="stat-lbl">Clients uniques</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+(tot>0?Math.round((rb/tot)*100):0)+'%</div><div class="stat-lbl">Coupe+Barbe</div></div>';
+
+  /* Revenus 6 derniers mois */
+  var mns=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  var monthData=[];
+  for(var i=5;i>=0;i--){
+    var md=new Date(n.getFullYear(),n.getMonth()-i,1);
+    var mEnd=new Date(md.getFullYear(),md.getMonth()+1,1);
+    var rev=appts.filter(function(a){var ad=new Date(a.date+'T12:00:00');return ad>=md&&ad<mEnd;}).reduce(function(s,a){return s+(a.service==='coupe'?S.prixCoupe:S.prixCombo);},0);
+    monthData.push({label:mns[md.getMonth()],val:rev});
+  }
+  var maxR=Math.max.apply(null,monthData.map(function(m){return m.val;}));if(maxR===0)maxR=1;
+  document.getElementById('chart-revenue').innerHTML=monthData.map(function(m){
+    var pct=Math.max(Math.round((m.val/maxR)*100),m.val>0?8:0);
+    return '<div class="bar-chart-row"><div class="bar-chart-label">'+m.label+'</div>'+
+      '<div class="bar-chart-bar-wrap"><div class="bar-chart-bar" style="width:'+pct+'%;background-color:#c4962a">'+(m.val>0?m.val+'€':'')+'</div></div></div>';
+  }).join('');
+
+  /* Jours */
+  var dayNames=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  var dayCounts=[0,0,0,0,0,0,0];
+  appts.forEach(function(a){dayCounts[new Date(a.date+'T12:00:00').getDay()]++;});
+  var maxD=Math.max.apply(null,dayCounts);if(maxD===0)maxD=1;
+  var openDays=S.openDays||[3,4,5,6];
+  document.getElementById('chart-days').innerHTML=openDays.map(function(d){
+    var pct=Math.max(Math.round((dayCounts[d]/maxD)*100),dayCounts[d]>0?8:0);
+    return '<div class="bar-chart-row"><div class="bar-chart-label">'+dayNames[d]+'</div>'+
+      '<div class="bar-chart-bar-wrap"><div class="bar-chart-bar" style="width:'+pct+'%;background-color:#e8b84b">'+dayCounts[d]+'</div></div></div>';
+  }).join('');
+
+  /* Services */
+  var maxS=Math.max(rc,rb,1);
+  document.getElementById('chart-services').innerHTML=
+    '<div class="bar-chart-row"><div class="bar-chart-label">Coupe</div><div class="bar-chart-bar-wrap"><div class="bar-chart-bar" style="width:'+Math.max(Math.round(rc/maxS*100),rc>0?8:0)+'%;background-color:#c4962a">'+rc+'</div></div><div class="bar-chart-val">'+rc*S.prixCoupe+'€</div></div>'+
+    '<div class="bar-chart-row"><div class="bar-chart-label">C+Barbe</div><div class="bar-chart-bar-wrap"><div class="bar-chart-bar" style="width:'+Math.max(Math.round(rb/maxS*100),rb>0?8:0)+'%;background-color:#4cd980">'+rb+'</div></div><div class="bar-chart-val">'+rb*S.prixCombo+'€</div></div>';
+}
+
+/* ====================================================
+   AGENDA SEMAINE
+   ==================================================== */
+var agendaWeekOffset=0;
+function agendaGoToday(){agendaWeekOffset=0;renderAgenda();}
+function agendaPrevWeek(){agendaWeekOffset--;renderAgenda();}
+function agendaNextWeek(){agendaWeekOffset++;renderAgenda();}
+
+function renderAgenda(){
+  var today=new Date();today.setHours(0,0,0,0);
+  var monday=new Date(today);
+  var dow2=today.getDay();var diff2=dow2===0?-6:1-dow2;
+  monday.setDate(today.getDate()+diff2+(agendaWeekOffset*7));
+  var days=[];for(var i=0;i<7;i++){var dd=new Date(monday);dd.setDate(monday.getDate()+i);days.push(dd);}
+  var mns=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  var d0=days[0],d6=days[6];
+  document.getElementById('agenda-week-label').textContent=d0.getDate()+' '+mns[d0.getMonth()]+' – '+d6.getDate()+' '+mns[d6.getMonth()]+' '+d6.getFullYear();
+  var slots=getSlots();
+  var dn=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  var todayStr=dstr(today);
+  var thead='<tr><th></th>'+days.map(function(d,i){
+    var ds2=dstr(d);var isT=ds2===todayStr;
+    var isOp=(S.openDays||[3,4,5,6]).indexOf(d.getDay())>=0;
+    var isBlk2=blocked.some(function(b){return b.date===ds2;});
+    var col=isT?'#e8b84b':isOp&&!isBlk2?'#f0ede6':'#4a4a44';
+    return '<th class="'+(isT?'today-col':'')+'">'+
+      '<span style="display:block;font-size:11px;color:'+col+'">'+dn[i]+'</span>'+
+      '<span style="font-size:17px;font-family:\'Playfair Display\',serif;color:'+col+'">'+d.getDate()+'</span>'+
+      (isBlk2?'<span style="display:block;font-size:9px;color:#c0392b;letter-spacing:1px">FERMÉ</span>':'')+
+    '</th>';
+  }).join('')+'</tr>';
+
+  var tbody=slots.map(function(slot){
+    var tr='<tr><td>'+slot+'</td>';
+    days.forEach(function(d){
+      var ds2=dstr(d);
+      var isOp=(S.openDays||[3,4,5,6]).indexOf(d.getDay())>=0;
+      var isBlk2=blocked.some(function(b){return b.date===ds2;});
+      if(!isOp||isBlk2){tr+='<td><div class="agenda-slot blocked-slot"></div></td>';return;}
+      var ap=appts.find(function(a){return a.date===ds2&&a.time===slot;});
+      if(ap){
+        tr+='<td><div class="agenda-slot booked'+(ap.service==='combo'?' booked-combo':'')+'" onclick="agendaShowAppt(\''+ap.id+'\')">'+
+          '<div class="ag-name">'+ap.prenom+'</div>'+
+          '<div class="ag-svc">'+(ap.service==='combo'?'C+B':'✂')+'</div></div></td>';
+      } else {
+        tr+='<td><div class="agenda-slot free"></div></td>';
+      }
+    });
+    return tr+'</tr>';
+  }).join('');
+
+  document.getElementById('agenda-grid').innerHTML=
+    '<table class="agenda-table"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table>';
+}
+
+function agendaShowAppt(id){
+  var a=appts.find(function(x){return x.id===id;});if(!a)return;
+  showDlg(
+    fmtD(a.date).replace(/^\w+,?\s*/,'')+' à '+a.time+'\n'+a.prenom+' '+a.nom+'\n'+a.tel+'\n'+(a.service==='coupe'?'Coupe — '+S.prixCoupe+'€':'Coupe+Barbe — '+S.prixCombo+'€')+(a.note?'\n📝 '+a.note:''),
+    '📋',null,'OK','gold'
+  );
 }
 
 /* BLOCKED */
